@@ -9,6 +9,8 @@ const DEFAULT_ENCODING = 'utf8';
 
 export function generateCSV(baseJSONPath: string, csvPath: string) {
   const translationFileNames = findJSONTranslationFileNames(baseJSONPath);
+
+  console.log(translationFileNames);
   const languageKeys = translationFileNames.map(name => name.substr(0, 2));
   const translationFiles = readJSONTranslationFiles(
     baseJSONPath,
@@ -29,7 +31,6 @@ export function generateCSV(baseJSONPath: string, csvPath: string) {
 
   const outputPath = path.join(csvPath);
   const encodedData = encoding.convert(output, DEFAULT_ENCODING);
-
   writeCSVFile(outputPath, encodedData);
 }
 
