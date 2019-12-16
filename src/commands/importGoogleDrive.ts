@@ -1,11 +1,13 @@
 import { CommandModule } from 'yargs';
+import { OAuth2Client } from 'googleapis';
+import { initGoogleAPI } from '../googleApi';
 
 const command: CommandModule = {
   command: 'import-google-drive',
   aliases: ['importGoogleDrive'],
   describe: 'Generates JSON translation files from a Google Drive spreadsheet',
   handler: () => {
-    console.log('import-google-drive');
+    initGoogleAPI((auth: OAuth2Client) => console.log(auth));
   },
 };
 

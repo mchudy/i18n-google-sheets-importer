@@ -16,12 +16,18 @@
   "author": "Marcin Chudy",
   "license": "MIT",
   "dependencies": {
+    "encoding": "^0.1.12",
+    "flat": "^5.0.0",
     "googleapis": "^46.0.0",
     "lodash": "^4.17.15",
+    "papaparse": "^5.1.0",
     "yargs": "^15.0.2"
   },
   "devDependencies": {
+    "@types/flat": "0.0.28",
+    "@types/lodash": "^4.14.149",
     "@types/node": "^12.12.18",
+    "@types/papaparse": "^5.0.3",
     "@types/yargs": "^13.0.3",
     "typescript": "^3.7.3"
   }
