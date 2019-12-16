@@ -1,8 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-console */
-/* eslint-disable camelcase */
-
-require('dotenv').config();
 const encoding = require('encoding');
 const Papa = require('papaparse');
 const _ = require('lodash');
