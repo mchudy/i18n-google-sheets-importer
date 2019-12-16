@@ -5,18 +5,15 @@ import flatten from 'flat';
 import Papa from 'papaparse';
 const encoding = require('encoding');
 
-const TRANSLATIONS_CSV_FILE_PATH = path.join(__dirname, '../translations.csv');
-const TRANSLATIONS_JSON_FOLDER_PATH = path.join(
-  __dirname,
-  '../src/translations'
-);
-const SPREADSHEET_ID = process.env.TRANSLATIONS_SPREADSHEET_ID;
-const SHEET_NAME = 'FE';
+const DEFAULT_ENCODING = 'utf8';
 
-export function generateCSV() {
-  const translationFileNames = findJSONTranslationFileNames();
+export function generateCSV(baseJSONPath: string, csvPath: string) {
+  const translationFileNames = findJSONTranslationFileNames(baseJSONPath);
   const languageKeys = translationFileNames.map(name => name.substr(0, 2));
-  const translationFiles = readJSONTranslationFiles(translationFileNames);
+  const translationFiles = readJSONTranslationFiles(
+    baseJSONPath,
+    translationFileNames
+  );
   const keys = extractKeys(translationFiles);
 
   const output = Papa.unparse(
@@ -30,8 +27,8 @@ export function generateCSV() {
     }
   );
 
-  const outputPath = path.join(TRANSLATIONS_CSV_FILE_PATH);
-  const encodedData = encoding.convert(output, 'utf8');
+  const outputPath = path.join(csvPath);
+  const encodedData = encoding.convert(output, DEFAULT_ENCODING);
 
   writeCSVFile(outputPath, encodedData);
 }
@@ -46,66 +43,69 @@ function extractKeys(translationFiles: object[]) {
   return keys;
 }
 
-function readJSONTranslationFiles(translationFileNames: string[]) {
+function readJSONTranslationFiles(
+  basePath: string,
+  translationFileNames: string[]
+): any[] {
   return translationFileNames
     .map(file => {
       const rawData = fs.readFileSync(
-        path.join(TRANSLATIONS_JSON_FOLDER_PATH, file),
-        'utf8'
+        path.join(basePath, file),
+        DEFAULT_ENCODING
       );
       return JSON.parse(rawData);
     })
-    .map(flatten);
+    .map(value => flatten(value));
 }
 
-function findJSONTranslationFileNames() {
+function findJSONTranslationFileNames(translationJSONFolderPath: string) {
   let translationFileNames = fs
-    .readdirSync(TRANSLATIONS_JSON_FOLDER_PATH)
+    .readdirSync(translationJSONFolderPath)
     .filter(file => file.endsWith('.json') && file !== 'package.json');
   return _.reverse(translationFileNames);
 }
 
-function importCSV() {
-  const csv = fs.readFileSync(TRANSLATIONS_CSV_FILE_PATH, { encoding: 'utf8' });
+// function importCSV(csvPath: string) {
+//   const csv = fs.readFileSync(csvPath, { encoding: DEFAULT_ENCODING });
 
-  const output = Papa.parse(csv, { header: true, encoding: 'utf8' });
-  const languages = output.meta.fields.slice(1);
+//   const output = Papa.parse(csv, { header: true, encoding: DEFAULT_ENCODING });
+//   const languages = output.meta.fields.slice(1);
 
-  generateJSONs(languages, output.data);
-}
+//   generateJSONs(languages, output.data);
+// }
 
-function generateJSONs(languages: string[], data: any[]) {
-  languages.forEach(lng => {
-    const translations = {};
-    data.forEach(translation => {
-      _.set(translations, translation.id, translation[lng]);
-    });
+// function generateJSONs(outputPath: string, languages: string[], data: any[]) {
+//   languages.forEach(lng => {
+//     const translations = {};
+//     data.forEach(translation => {
+//       _.set(translations, translation.id, translation[lng]);
+//     });
 
-    fs.writeFileSync(
-      path.join(TRANSLATIONS_JSON_FOLDER_PATH, `${lng}.json`),
-      JSON.stringify(translations, null, 2)
-    );
-  });
-}
+//     fs.writeFileSync(
+//       path.join(outputPath, `${lng}.json`),
+//       JSON.stringify(translations, null, 2)
+//     );
+//   });
+// }
 
-function importTranslationsFromSpreadsheet(spreadsheetData) {
-  const rows = spreadsheetData.data.values;
-  if (!rows.length) {
-    return console.error('No data found in the spreadsheet');
-  }
+// function importTranslationsFromSpreadsheet(spreadsheetData: any) {
+//   const rows = spreadsheetData.data.values;
+//   if (!rows.length) {
+//     return console.error('No data found in the spreadsheet');
+//   }
 
-  const header = rows[0];
-  const languages = header.slice(1);
+//   const header = rows[0];
+//   const languages = header.slice(1);
 
-  const data = rows.slice(1).map(row => {
-    const result = {
-      id: row[0],
-    };
-    for (let i = 0; i < languages.length; i += 1) {
-      result[languages[i]] = row[i + 1] || '';
-    }
-    return result;
-  });
+//   const data = rows.slice(1).map(row => {
+//     const result = {
+//       id: row[0],
+//     };
+//     for (let i = 0; i < languages.length; i += 1) {
+//       result[languages[i]] = row[i + 1] || '';
+//     }
+//     return result;
+//   });
 
-  generateJSONs(languages, data);
-}
+//   generateJSONs(languages, data);
+// }

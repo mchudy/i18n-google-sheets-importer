@@ -1,5 +1,5 @@
 import { CommandModule } from 'yargs';
-import { OAuth2Client } from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
 import { initGoogleAPI } from '../googleApi';
 
 const command: CommandModule = {
