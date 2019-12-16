@@ -185,15 +185,3 @@ function getNewToken(oAuth2Client, callback) {
     });
   });
 }
-
-function printUsage() {
-  console.log(
-    `Usage: ./translations.js command
-Available commands:
-  export-csv:             Exports translations from local JSON i18next files to a single CSV file
-  import-csv:             Converts a single CSV into multiple JSON files for i18next
-  import-google-drive:    Imports translations from a Google Docs spreadsheet. Requires credentials.json file to be present 
-                          in the same folder as the script (https://developers.google.com/sheets/api/quickstart/nodejs)
-`
-  );
-}
