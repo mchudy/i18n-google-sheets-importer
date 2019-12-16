@@ -20,24 +20,6 @@ const SHEET_NAME = 'FE';
 
 run(process.argv);
 
-function run([_parser, _tool, command, ..._args]) {
-  switch (command) {
-    case 'export-csv':
-      generateCSV();
-      break;
-    case 'import-csv':
-      importCSV();
-      break;
-    case 'import-google-drive':
-      initGoogleAPI(importTranslationsFromSpreadsheet);
-      break;
-    case 'help':
-    default:
-      printUsage();
-      break;
-  }
-}
-
 function importTranslationsFromSpreadsheet(auth) {
   const sheets = google.sheets({ version: 'v4', auth });
   sheets.spreadsheets.values.get(
