@@ -1,13 +1,10 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import fs from 'fs';
-import path from 'path';
 import readline from 'readline';
 
 const GOOGLE_API_VERSION = 'v4';
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
-const GOOGLE_CREDENTIALS_PATH = path.join(__dirname, 'credentials.json');
-const TOKEN_PATH = path.join(__dirname, 'token.json');
 
 interface GoogleAPICredentials {
   installed: {
@@ -31,14 +28,15 @@ export async function downloadSpreadsheet(
   });
 }
 
-export function initGoogleAPI(callback: GoogleAPICallback) {
-  const rawCredentials = fs.readFileSync(GOOGLE_CREDENTIALS_PATH, 'utf8');
+export function initGoogleAPI(credentialsPath: string, tokenPath: string, callback: GoogleAPICallback) {
+  const rawCredentials = fs.readFileSync(credentialsPath, 'utf8');
   const credentials = JSON.parse(rawCredentials) as GoogleAPICredentials;
-  authorize(credentials, callback);
+  authorize(credentials, tokenPath, callback);
 }
 
 function authorize(
   credentials: GoogleAPICredentials,
+  tokenPath: string,
   callback: GoogleAPICallback
 ) {
   const { client_secret, client_id, redirect_uris } = credentials.installed;
@@ -49,16 +47,16 @@ function authorize(
   );
 
   // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, 'utf8', (err, token) => {
+  fs.readFile(tokenPath, 'utf8', (err, token) => {
     if (err) {
-      return getNewToken(oAuth2Client, callback);
+      return getNewToken(tokenPath, oAuth2Client, callback);
     }
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(oAuth2Client);
   });
 }
 
-function getNewToken(oAuth2Client: OAuth2Client, callback: GoogleAPICallback) {
+function getNewToken(tokenPath: string, oAuth2Client: OAuth2Client, callback: GoogleAPICallback) {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
@@ -80,11 +78,11 @@ function getNewToken(oAuth2Client: OAuth2Client, callback: GoogleAPICallback) {
       }
       oAuth2Client.setCredentials(token);
       // Store the token to disk for later program executions
-      fs.writeFile(TOKEN_PATH, JSON.stringify(token), error => {
+      fs.writeFile(tokenPath, JSON.stringify(token), error => {
         if (error) {
           return console.error(error);
         }
-        console.log('Token stored to', TOKEN_PATH);
+        console.log('Token stored to', tokenPath);
       });
       callback(oAuth2Client);
     });
