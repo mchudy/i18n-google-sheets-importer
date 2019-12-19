@@ -15,6 +15,7 @@
     "sourceMap": true,
     "noUnusedParameters": true,
     "declaration": true,
+    "skipLibCheck": true
   },
   "compileOnSave": true
 }

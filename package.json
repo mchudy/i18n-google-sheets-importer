@@ -1,17 +1,23 @@
 {
-  "name": "i18n-google-drive-importer",
+  "name": "i18n-google-sheets",
   "version": "1.0.0",
-  "description": "",
+  "description": "Generate JSON translation files from a Google Sheet spreadsheet",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "compile": "tsc"
+    "build": "tsc"
+  },
+  "bin": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mchudy/i18n-google-sheets.git"
   },
   "keywords": [
     "i18n",
     "internationalization",
     "translation",
-    "googleapis"
+    "googleapis",
+    "googlesheets"
   ],
   "author": "Marcin Chudy",
   "license": "MIT",

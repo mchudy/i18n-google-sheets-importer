@@ -33,6 +33,40 @@ export function generateCSV(baseJSONPath: string, csvPath: string) {
   writeCSVFile(outputPath, encodedData);
 }
 
+export function importCSV(csvPath: string, outputPath: string) {
+  const csv = fs.readFileSync(csvPath, { encoding: DEFAULT_ENCODING });
+
+  const output = Papa.parse(csv, { header: true, encoding: DEFAULT_ENCODING });
+  const languages = output.meta.fields.slice(1);
+
+  generateJSONs(outputPath, languages, output.data);
+}
+
+export function importTranslationsFromSpreadsheet(
+  spreadsheetData: any,
+  outputPath: string
+) {
+  const rows = spreadsheetData.data.values as string[][];
+  if (!rows.length) {
+    return console.error('No data found in the spreadsheet');
+  }
+
+  const header = rows[0];
+  const languages = header.slice(1);
+
+  const data = rows.slice(1).map(row => {
+    const result: any = {
+      id: row[0],
+    };
+    for (let i = 0; i < languages.length; i += 1) {
+      result[languages[i]] = row[i + 1] || '';
+    }
+    return result;
+  });
+
+  generateJSONs(outputPath, languages, data);
+}
+
 function writeCSVFile(outputPath: string, encodedData: string) {
   fs.writeFileSync(outputPath, encodedData, { encoding: 'binary' });
 }
@@ -65,47 +99,20 @@ function findJSONTranslationFileNames(translationJSONFolderPath: string) {
   return _.reverse(translationFileNames);
 }
 
-// function importCSV(csvPath: string) {
-//   const csv = fs.readFileSync(csvPath, { encoding: DEFAULT_ENCODING });
+function generateJSONs(
+  outputPath: string,
+  languages: string[],
+  data: { [key: string]: string }[]
+) {
+  languages.forEach(lng => {
+    const translations = {};
+    data.forEach(translation => {
+      _.set(translations, translation.id, translation[lng]);
+    });
 
-//   const output = Papa.parse(csv, { header: true, encoding: DEFAULT_ENCODING });
-//   const languages = output.meta.fields.slice(1);
-
-//   generateJSONs(languages, output.data);
-// }
-
-// function generateJSONs(outputPath: string, languages: string[], data: any[]) {
-//   languages.forEach(lng => {
-//     const translations = {};
-//     data.forEach(translation => {
-//       _.set(translations, translation.id, translation[lng]);
-//     });
-
-//     fs.writeFileSync(
-//       path.join(outputPath, `${lng}.json`),
-//       JSON.stringify(translations, null, 2)
-//     );
-//   });
-// }
-
-// function importTranslationsFromSpreadsheet(spreadsheetData: any) {
-//   const rows = spreadsheetData.data.values;
-//   if (!rows.length) {
-//     return console.error('No data found in the spreadsheet');
-//   }
-
-//   const header = rows[0];
-//   const languages = header.slice(1);
-
-//   const data = rows.slice(1).map(row => {
-//     const result = {
-//       id: row[0],
-//     };
-//     for (let i = 0; i < languages.length; i += 1) {
-//       result[languages[i]] = row[i + 1] || '';
-//     }
-//     return result;
-//   });
-
-//   generateJSONs(languages, data);
-// }
+    fs.writeFileSync(
+      path.join(outputPath, `${lng}.json`),
+      JSON.stringify(translations, null, 2)
+    );
+  });
+}

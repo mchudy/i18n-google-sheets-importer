@@ -1,23 +1,28 @@
 import { CommandModule } from 'yargs';
-import { generateCSV } from '../parsing';
+import { generateCSV } from '../converter';
 
-const command: CommandModule = {
+const command: CommandModule<{}, ExportCsvArgs> = {
   command: 'export-csv',
   aliases: ['exportCsv', 'exportCSV'],
   describe: 'Exports JSON translation files to a CSV file',
   builder: {
     input: {
-      default: '.',
+      default: 'translations',
       description: 'Path to a folder where JSON translation files are located',
     },
     output: {
-      default: '.',
+      default: 'translations.csv',
       description: 'Path to which the result CSV file should be saved',
     },
   },
-  handler: (argv: any) => {
+  handler: argv => {
     generateCSV(argv.input, argv.output);
   },
 };
+
+interface ExportCsvArgs {
+  input: string;
+  output: string;
+}
 
 module.exports = command;

@@ -1,7 +1,0 @@
-{
-  "key": "en key",
-  "namespace": {
-    "nestedKey1": "en nested key1",
-    "nestedKey2": "en nested key2"
-  }
-}
