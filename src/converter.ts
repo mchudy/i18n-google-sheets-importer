@@ -29,6 +29,8 @@ export function generateCSV(baseJSONPath: string, csvPath: string) {
   );
 
   const outputPath = path.join(csvPath);
+  console.log(csvPath);
+  console.log(outputPath);
   const encodedData = encoding.convert(output, DEFAULT_ENCODING);
   writeCSVFile(outputPath, encodedData);
 }

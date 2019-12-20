@@ -17,7 +17,7 @@ const command: CommandModule<{}, ImportGoogleSheetsArgs> = {
       description:
         'Path to a folder where generated JSON files should be saved',
     },
-    spreadsheetName: {
+    sheetName: {
       default: 'Sheet1',
       description: 'Name of the sheet which contains translations',
     },
@@ -37,7 +37,7 @@ const command: CommandModule<{}, ImportGoogleSheetsArgs> = {
       const spreadsheet = await downloadSpreadsheet(
         auth,
         argv.spreadsheetId,
-        argv.spreadsheetName
+        argv.sheetName
       );
       importTranslationsFromSpreadsheet(spreadsheet, argv.output);
     });
@@ -46,7 +46,7 @@ const command: CommandModule<{}, ImportGoogleSheetsArgs> = {
 
 interface ImportGoogleSheetsArgs {
   spreadsheetId: string;
-  spreadsheetName: string;
+  sheetName: string;
   credentials: string;
   token: string;
   output: string;

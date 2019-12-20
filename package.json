@@ -5,9 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run clean && npm run build",
+    "clean": "rm -rf ./dist"
   },
-  "bin": "./dist/index.js",
+  "bin": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/mchudy/i18n-google-sheets.git"
