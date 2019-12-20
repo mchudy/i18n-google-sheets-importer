@@ -1,5 +1,5 @@
 {
-  "name": "i18n-google-sheets",
+  "name": "i18n-google-sheets-importer",
   "version": "1.0.0",
   "description": "Generate JSON translation files from a Google Sheet spreadsheet",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
   "bin": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mchudy/i18n-google-sheets.git"
+    "url": "git://github.com/mchudy/i18n-google-sheets-importer.git"
   },
   "keywords": [
     "i18n",

@@ -5,7 +5,7 @@ Automatically generate JSON translation files from Google Docs spreadsheets.
 ## Installation
 
 ```
-npm i i18n-google-sheets --save-dev
+npm i i18n-google-sheets-importer --save-dev
 ```
 
 ## Quick start
@@ -19,7 +19,7 @@ Generate `credentials.json` file to access the Google Sheets API by following St
 Run the following command from the folder where `credentials.json` file is located:
 
 ```
-i18n-google-sheets --spreadsheetId spreadsheetId
+i18n-google-sheets-importer --spreadsheetId spreadsheetId
 ```
 
 The script will generate `translations` folder containing files `en.json`, `de.json` and `es.json`.
@@ -40,7 +40,7 @@ Nesting is supported, so the above spreadsheet will get converted to a following
 ### `import-google-sheet`
 
 ```
-i18n-google-sheets import-google-sheet
+i18n-google-sheets-importer import-google-sheet
   --spreadsheetId spreadsheetId
   [--output ./translations]
   [--sheetName Sheet1]
@@ -61,7 +61,7 @@ Arguments:
 ### `export-csv`
 
 ```
-i18n-google-sheets export-csv --input ./translations --output ./translations.csv
+i18n-google-sheets-importer export-csv --input ./translations --output ./translations.csv
 ```
 
 Generates a single CSV file from existing JSON files.
@@ -71,7 +71,7 @@ Useful if you want to migrate the i18n in an existing project to Google Sheets (
 ### `import-csv`
 
 ```
-i18n-google-sheets import-csv --input ./translations.csv --output ./translations
+i18n-google-sheets-importer import-csv --input ./translations.csv --output ./translations
 ```
 
 Generates JSON translation files from a local CSV file.
