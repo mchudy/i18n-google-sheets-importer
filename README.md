@@ -19,7 +19,7 @@ Generate `credentials.json` file to access the Google Sheets API by following St
 Run the following command from the folder where `credentials.json` file is located:
 
 ```
-i18n-google-sheets-importer --spreadsheetId spreadsheetId
+i18n-google-sheets-importer import-google-sheet --spreadsheetId spreadsheetId
 ```
 
 The script will generate `translations` folder containing files `en.json`, `de.json` and `es.json`.
