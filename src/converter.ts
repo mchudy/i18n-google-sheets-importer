@@ -104,6 +104,10 @@ function generateJSONs(
   languages: string[],
   data: { [key: string]: string }[]
 ) {
+  if (!fs.existsSync(outputPath)) {
+    fs.mkdirSync(outputPath);
+  }
+
   languages.forEach(lng => {
     const translations = {};
     data.forEach(translation => {
