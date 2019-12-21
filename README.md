@@ -1,5 +1,7 @@
 # i18n-google-sheets-importer
 
+<img src="https://img.shields.io/npm/v/i18n-google-sheets-importer">
+
 Automatically generate JSON translation files from Google Docs spreadsheets.
 
 ## Installation
