@@ -1,6 +1,6 @@
 {
   "name": "i18n-google-sheets-importer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate JSON translation files from a Google Sheet spreadsheet",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
